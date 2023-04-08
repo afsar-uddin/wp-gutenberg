@@ -33,5 +33,4 @@ bs-config.js
 !/wp-content/themes
 /wp-content/themes/*
 !/wp-content/themes/twentytwentyone/
-/*
-!/wp-content/themes/twentytwentyone/node_modules/*
+node_modules/
