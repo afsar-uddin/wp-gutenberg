@@ -30,7 +30,8 @@ bs-config.js
 /wp-content/plugins/*
 !/wp-content/plugins/basic-block/
 # !/wp-content/plugins/itclan-core.zip
-# !/wp-content/themes
-# /wp-content/themes/*
-# !/wp-content/themes/dr-jays-naturals/
-# !/wp-content/themes/dr-jays-naturals.zip
+!/wp-content/themes
+/wp-content/themes/*
+!/wp-content/themes/twentytwentyone/
+/*
+!/wp-content/themes/twentytwentyone/node_modules/*
