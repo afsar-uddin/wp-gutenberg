@@ -22,6 +22,8 @@
 		<?php
 		the_content();
 
+		// echo get_the_content();
+
 		wp_link_pages(
 			array(
 				'before'   => '<nav class="page-links" aria-label="' . esc_attr__( 'Page', 'twentytwentyone' ) . '">',

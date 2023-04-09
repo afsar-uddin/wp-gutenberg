@@ -1,4 +1,5 @@
 const { registerBlockType } = wp.blocks;
+const { RichText } = wp.editor;
 
 registerBlockType('afsarina/custom-cta', {
     //built in attributes
@@ -9,8 +10,15 @@ registerBlockType('afsarina/custom-cta', {
 
     //custom attribute
     attributes: {
-        author: {
-            type: 'string'
+        title: {
+            type: 'string',
+            source: 'html',
+            selector: 'h2'
+        },
+        body: {
+            type: 'string',
+            source: 'html',
+            selector: 'p'
         }
     },
     
@@ -19,16 +27,43 @@ registerBlockType('afsarina/custom-cta', {
     
     //built in funtion
     edit({attributes, setAttributes }) {
+        const {title, body} = attributes;
+
         //custom funtion 
-        function updateAuthor(event) {
-            setAttributes({author: event.target.value})
+        function onchangeTitle(newTitle) {
+            setAttributes({title: newTitle});
         }
 
-        return <input value={attributes.author} type="text" onChange={ updateAuthor } />;
+        function onchangeBody(newBody) {
+            setAttributes({body: newBody});
+        }
+        
+        return([
+            <div class="cta-container">
+                <RichText   key="editable"
+                            tagName="h2"
+                            placeholder="Your CTA title"
+                            value={title}
+                            onChange={onchangeTitle} />
+                <RichText   key="editable"
+                            tagName="p"
+                            placeholder="Your CTA Description"
+                            value={body}
+                            onChange={onchangeBody} />
+            </div>
+        ]);
     },
 
 
     save({attributes}) { 
-         return <p>Author name: {attributes.author}</p>;
+
+        const {title, body} = attributes;
+
+         return(
+            <div class="cta-container">
+                <h2>{title}</h2>
+                <RichText.Content tagName="p" value={body} />
+            </div>
+         );
     }
 });
