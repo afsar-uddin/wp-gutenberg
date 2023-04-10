@@ -1,5 +1,6 @@
 const { registerBlockType } = wp.blocks;
-const { RichText } = wp.editor;
+const { RichText, InspectorControls, ColorPalette } = wp.editor;
+const { PanelBody } = wp.components;
 
 registerBlockType('afsarina/custom-cta', {
     //built in attributes
@@ -15,6 +16,10 @@ registerBlockType('afsarina/custom-cta', {
             source: 'html',
             selector: 'h2'
         },
+        titleColor: {
+            type: 'string',
+            default: 'black',
+        },
         body: {
             type: 'string',
             source: 'html',
@@ -22,12 +27,10 @@ registerBlockType('afsarina/custom-cta', {
         }
     },
     
-    
-    
-    
+       
     //built in funtion
     edit({attributes, setAttributes }) {
-        const {title, body} = attributes;
+        const {title, body, titleColor, descColor} = attributes;
 
         //custom funtion 
         function onchangeTitle(newTitle) {
@@ -37,14 +40,33 @@ registerBlockType('afsarina/custom-cta', {
         function onchangeBody(newBody) {
             setAttributes({body: newBody});
         }
+
+        function onTitleColorChange(newColor) {
+            setAttributes({titleColor: newColor});
+        }
+
+        function onDescColorChange(newColor) {
+            setAttributes({descColor: newColor});
+        }
         
         return([
+            
+            <InspectorControls style={{marginBottom: '40px'}}>
+                <PanelBody title={'Title Style'}>
+                    <p><strong>Select a title color: </strong></p>
+                    <ColorPalette value={titleColor} onChange={onTitleColorChange}></ColorPalette>
+                    <p><strong>Select description color: </strong></p>
+                    <ColorPalette value={descColor} onChange={onDescColorChange}></ColorPalette>
+                </PanelBody>
+            </InspectorControls>,
+
             <div class="cta-container">
                 <RichText   key="editable"
                             tagName="h2"
                             placeholder="Your CTA title"
                             value={title}
-                            onChange={onchangeTitle} />
+                            onChange={onchangeTitle}
+                            style={{title: titleColor}} />
                 <RichText   key="editable"
                             tagName="p"
                             placeholder="Your CTA Description"
@@ -57,12 +79,12 @@ registerBlockType('afsarina/custom-cta', {
 
     save({attributes}) { 
 
-        const {title, body} = attributes;
+        const {title, body, titleColor, descColor} = attributes;
 
          return(
             <div class="cta-container">
-                <h2>{title}</h2>
-                <RichText.Content tagName="p" value={body} />
+                <h2 style={{color: titleColor}}>{title}</h2>
+                <RichText.Content style={{color: descColor}} tagName="p" value={body} />
             </div>
          );
     }

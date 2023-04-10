@@ -94,8 +94,13 @@ const {
   registerBlockType
 } = wp.blocks;
 const {
-  RichText
+  RichText,
+  InspectorControls,
+  ColorPalette
 } = wp.editor;
+const {
+  PanelBody
+} = wp.components;
 registerBlockType('afsarina/custom-cta', {
   //built in attributes
   title: 'Afsarina call to action',
@@ -108,6 +113,10 @@ registerBlockType('afsarina/custom-cta', {
       type: 'string',
       source: 'html',
       selector: 'h2'
+    },
+    titleColor: {
+      type: 'string',
+      default: 'black'
     },
     body: {
       type: 'string',
@@ -123,7 +132,9 @@ registerBlockType('afsarina/custom-cta', {
     } = _ref;
     const {
       title,
-      body
+      body,
+      titleColor,
+      descColor
     } = attributes;
 
     //custom funtion 
@@ -137,14 +148,39 @@ registerBlockType('afsarina/custom-cta', {
         body: newBody
       });
     }
-    return [(0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    function onTitleColorChange(newColor) {
+      setAttributes({
+        titleColor: newColor
+      });
+    }
+    function onDescColorChange(newColor) {
+      setAttributes({
+        descColor: newColor
+      });
+    }
+    return [(0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(InspectorControls, {
+      style: {
+        marginBottom: '40px'
+      }
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(PanelBody, {
+      title: 'Title Style'
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("strong", null, "Select a title color: ")), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(ColorPalette, {
+      value: titleColor,
+      onChange: onTitleColorChange
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("strong", null, "Select description color: ")), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(ColorPalette, {
+      value: descColor,
+      onChange: onDescColorChange
+    }))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       class: "cta-container"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(RichText, {
       key: "editable",
       tagName: "h2",
       placeholder: "Your CTA title",
       value: title,
-      onChange: onchangeTitle
+      onChange: onchangeTitle,
+      style: {
+        title: titleColor
+      }
     }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(RichText, {
       key: "editable",
       tagName: "p",
@@ -159,11 +195,20 @@ registerBlockType('afsarina/custom-cta', {
     } = _ref2;
     const {
       title,
-      body
+      body,
+      titleColor,
+      descColor
     } = attributes;
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       class: "cta-container"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", null, title), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(RichText.Content, {
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", {
+      style: {
+        color: titleColor
+      }
+    }, title), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(RichText.Content, {
+      style: {
+        color: descColor
+      },
       tagName: "p",
       value: body
     }));
