@@ -96,11 +96,15 @@ const {
 const {
   RichText,
   InspectorControls,
-  ColorPalette
+  ColorPalette,
+  MediaUpload,
+  MediaPlaceholder
 } = wp.editor;
 const {
-  PanelBody
+  PanelBody,
+  IconButton
 } = wp.components;
+const ALLOWED_MEDIA_TYPES = ['audio'];
 registerBlockType('afsarina/custom-cta', {
   //built in attributes
   title: 'Afsarina call to action',
@@ -122,6 +126,10 @@ registerBlockType('afsarina/custom-cta', {
       type: 'string',
       source: 'html',
       selector: 'p'
+    },
+    backgroundImage: {
+      type: 'string',
+      default: null
     }
   },
   //built in funtion
@@ -134,7 +142,8 @@ registerBlockType('afsarina/custom-cta', {
       title,
       body,
       titleColor,
-      descColor
+      descColor,
+      backgroundImage
     } = attributes;
 
     //custom funtion 
@@ -158,6 +167,27 @@ registerBlockType('afsarina/custom-cta', {
         descColor: newColor
       });
     }
+    function onSelectImage(newImage) {
+      // setAttributes({backgroundImage: newImage.sizes.full.url})
+      setAttributes({
+        backgroundImage: newImage.media.url
+      });
+    }
+    const setImageAttributes = media => {
+      if (!media || !media.url) {
+        setAttributes({
+          imageUrl: null,
+          imageId: null,
+          imageAlt: null
+        });
+        return;
+      }
+      setAttributes({
+        imageUrl: media.url,
+        imageId: media.id,
+        imageAlt: media?.alt
+      });
+    };
     return [(0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(InspectorControls, {
       style: {
         marginBottom: '40px'
@@ -170,6 +200,21 @@ registerBlockType('afsarina/custom-cta', {
     }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("strong", null, "Select description color: ")), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(ColorPalette, {
       value: descColor,
       onChange: onDescColorChange
+    })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(PanelBody, {
+      title: 'Background image settings'
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("strong", null, "Select a background image: ")), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(MediaUpload, {
+      onSelect: media => console.log('selected ' + media.length)
+      // allowedTypes={ ALLOWED_MEDIA_TYPES }
+      ,
+      value: backgroundImage,
+      render: _ref2 => {
+        let {
+          open
+        } = _ref2;
+        return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(IconButton, {
+          onClick: open
+        }, "Open Media Library");
+      }
     }))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       class: "cta-container"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(RichText, {
@@ -189,10 +234,10 @@ registerBlockType('afsarina/custom-cta', {
       onChange: onchangeBody
     }))];
   },
-  save(_ref2) {
+  save(_ref3) {
     let {
       attributes
-    } = _ref2;
+    } = _ref3;
     const {
       title,
       body,

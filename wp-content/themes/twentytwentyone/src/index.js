@@ -1,6 +1,7 @@
 const { registerBlockType } = wp.blocks;
-const { RichText, InspectorControls, ColorPalette } = wp.editor;
-const { PanelBody } = wp.components;
+const { RichText, InspectorControls, ColorPalette, MediaUpload, MediaPlaceholder } = wp.editor;
+const { PanelBody, IconButton } = wp.components;
+const ALLOWED_MEDIA_TYPES = [ 'audio' ];
 
 registerBlockType('afsarina/custom-cta', {
     //built in attributes
@@ -24,13 +25,17 @@ registerBlockType('afsarina/custom-cta', {
             type: 'string',
             source: 'html',
             selector: 'p'
-        }
+        },
+        backgroundImage: {
+            type: 'string',
+            default: null
+        },
     },
     
        
     //built in funtion
     edit({attributes, setAttributes }) {
-        const {title, body, titleColor, descColor} = attributes;
+        const {title, body, titleColor, descColor, backgroundImage} = attributes;
 
         //custom funtion 
         function onchangeTitle(newTitle) {
@@ -48,7 +53,28 @@ registerBlockType('afsarina/custom-cta', {
         function onDescColorChange(newColor) {
             setAttributes({descColor: newColor});
         }
-        
+
+        function onSelectImage(newImage) {
+            // setAttributes({backgroundImage: newImage.sizes.full.url})
+            setAttributes({backgroundImage: newImage.media.url})
+        }
+
+        const setImageAttributes = (media) => {
+            if (!media || !media.url) {
+                setAttributes({
+                    imageUrl: null,
+                    imageId: null,
+                    imageAlt: null,
+                });
+                return;
+            }
+            setAttributes({
+                imageUrl: media.url,
+                imageId: media.id,
+                imageAlt: media?.alt,
+            });
+        };
+
         return([
             
             <InspectorControls style={{marginBottom: '40px'}}>
@@ -58,7 +84,22 @@ registerBlockType('afsarina/custom-cta', {
                     <p><strong>Select description color: </strong></p>
                     <ColorPalette value={descColor} onChange={onDescColorChange}></ColorPalette>
                 </PanelBody>
-            </InspectorControls>,
+
+                <PanelBody title={'Background image settings'}>
+                    <p><strong>Select a background image: </strong></p>
+                 
+<MediaUpload
+				onSelect={ ( media ) =>
+					console.log( 'selected ' + media.length )
+				}
+				// allowedTypes={ ALLOWED_MEDIA_TYPES }
+				value={ backgroundImage }
+				render={ ( { open } ) => (
+					<IconButton onClick={ open }>Open Media Library</IconButton>
+				) }
+			/>
+                </PanelBody>
+            </InspectorControls>,  
 
             <div class="cta-container">
                 <RichText   key="editable"
