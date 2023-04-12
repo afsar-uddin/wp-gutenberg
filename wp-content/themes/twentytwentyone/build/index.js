@@ -172,21 +172,6 @@ registerBlockType('afsarina/custom-cta', {
         backgroundImage: newImage.sizes.full.url
       });
     }
-    const setImageAttributes = media => {
-      if (!media || !media.url) {
-        setAttributes({
-          imageUrl: null,
-          imageId: null,
-          imageAlt: null
-        });
-        return;
-      }
-      setAttributes({
-        imageUrl: media.url,
-        imageId: media.id,
-        imageAlt: media?.alt
-      });
-    };
     return [(0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(InspectorControls, {
       style: {
         marginBottom: '40px'

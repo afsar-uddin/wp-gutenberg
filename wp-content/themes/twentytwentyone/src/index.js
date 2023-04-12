@@ -58,22 +58,6 @@ registerBlockType('afsarina/custom-cta', {
             setAttributes({backgroundImage: newImage.sizes.full.url})
         }
 
-        const setImageAttributes = (media) => {
-            if (!media || !media.url) {
-                setAttributes({
-                    imageUrl: null,
-                    imageId: null,
-                    imageAlt: null,
-                });
-                return;
-            }
-            setAttributes({
-                imageUrl: media.url,
-                imageId: media.id,
-                imageAlt: media?.alt,
-            });
-        };
-
         return([
             
             <InspectorControls style={{marginBottom: '40px'}}>
