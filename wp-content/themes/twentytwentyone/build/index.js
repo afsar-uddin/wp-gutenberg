@@ -102,9 +102,9 @@ const {
 } = wp.editor;
 const {
   PanelBody,
-  IconButton
+  IconButton,
+  RangeControl
 } = wp.components;
-const ALLOWED_MEDIA_TYPES = ['audio'];
 registerBlockType('afsarina/custom-cta', {
   //built in attributes
   title: 'Afsarina call to action',
@@ -130,6 +130,14 @@ registerBlockType('afsarina/custom-cta', {
     backgroundImage: {
       type: 'string',
       default: null
+    },
+    overlayColor: {
+      type: 'string',
+      default: 'black'
+    },
+    overlayOpacity: {
+      type: 'number',
+      default: 0.3
     }
   },
   //built in funtion
@@ -143,7 +151,9 @@ registerBlockType('afsarina/custom-cta', {
       body,
       titleColor,
       descColor,
-      backgroundImage
+      backgroundImage,
+      overlayColor,
+      overlayOpacity
     } = attributes;
 
     //custom funtion 
@@ -172,6 +182,16 @@ registerBlockType('afsarina/custom-cta', {
         backgroundImage: newImage.sizes.full.url
       });
     }
+    function onOverlayColorChange(newColor) {
+      setAttributes({
+        overlayColor: newColor
+      });
+    }
+    function onOverlayOpacityChange(newOpacity) {
+      setAttributes({
+        overlayOpacity: newOpacity
+      });
+    }
     return [(0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(InspectorControls, {
       style: {
         marginBottom: '40px'
@@ -198,6 +218,21 @@ registerBlockType('afsarina/custom-cta', {
           onClick: open
         }, "Open Media Library");
       }
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      style: {
+        marginTop: '20px',
+        marginBottom: '20px'
+      }
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("strong", null, "Overlay Color: ")), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(ColorPalette, {
+      value: overlayColor,
+      onChange: onOverlayColorChange
+    })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(RangeControl, {
+      label: 'Overlay Opacity',
+      value: overlayOpacity,
+      onChange: onOverlayOpacityChange,
+      min: 0,
+      max: 1,
+      step: 0.05
     }))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       class: "cta-container",
       style: {

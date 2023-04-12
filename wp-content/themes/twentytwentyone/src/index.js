@@ -1,7 +1,6 @@
 const { registerBlockType } = wp.blocks;
 const { RichText, InspectorControls, ColorPalette, MediaUpload, MediaPlaceholder } = wp.editor;
-const { PanelBody, IconButton } = wp.components;
-const ALLOWED_MEDIA_TYPES = [ 'audio' ];
+const { PanelBody, IconButton, RangeControl } = wp.components;
 
 registerBlockType('afsarina/custom-cta', {
     //built in attributes
@@ -30,12 +29,20 @@ registerBlockType('afsarina/custom-cta', {
             type: 'string',
             default: null
         },
+        overlayColor: {
+            type: 'string',
+            default: 'black'
+        },
+        overlayOpacity: {
+            type: 'number',
+            default: 0.3
+        }
     },
     
        
     //built in funtion
     edit({attributes, setAttributes }) {
-        const {title, body, titleColor, descColor, backgroundImage} = attributes;
+        const {title, body, titleColor, descColor, backgroundImage, overlayColor, overlayOpacity} = attributes;
 
         //custom funtion 
         function onchangeTitle(newTitle) {
@@ -58,6 +65,14 @@ registerBlockType('afsarina/custom-cta', {
             setAttributes({backgroundImage: newImage.sizes.full.url})
         }
 
+        function onOverlayColorChange(newColor) {
+            setAttributes({overlayColor: newColor})
+        }
+
+        function onOverlayOpacityChange(newOpacity) {
+            setAttributes({overlayOpacity: newOpacity})
+        }
+
         return([
             
             <InspectorControls style={{marginBottom: '40px'}}>
@@ -71,12 +86,23 @@ registerBlockType('afsarina/custom-cta', {
                 <PanelBody title={'Background image settings'}>
                     <p><strong>Select a background image: </strong></p>
                  <MediaUpload onSelect={onSelectImage} 
-				allowedTypes={ ['image'] }
-				value={ backgroundImage }
-				render={ ( { open } ) => (
-					<IconButton onClick={ open }>Open Media Library</IconButton>
-				) }
-			/>
+                    allowedTypes={ ['image'] }
+                    value={ backgroundImage }
+                    render={ ( { open } ) => (
+                        <IconButton onClick={ open }>Open Media Library</IconButton>
+                    ) }
+                />
+                    <div style={{marginTop: '20px', marginBottom: '20px'}}>
+                        <p><strong>Overlay Color: </strong></p>
+                        <ColorPalette value={overlayColor} onChange={onOverlayColorChange}></ColorPalette>
+                    </div>
+                    <RangeControl 
+                        label={'Overlay Opacity'} 
+                        value={ overlayOpacity }
+                        onChange={onOverlayOpacityChange} 
+                        min={0} 
+                        max={1} 
+                        step={0.05} />
                 </PanelBody>
             </InspectorControls>, 
 
