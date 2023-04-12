@@ -55,8 +55,7 @@ registerBlockType('afsarina/custom-cta', {
         }
 
         function onSelectImage(newImage) {
-            // setAttributes({backgroundImage: newImage.sizes.full.url})
-            setAttributes({backgroundImage: newImage.media.url})
+            setAttributes({backgroundImage: newImage.sizes.full.url})
         }
 
         const setImageAttributes = (media) => {
@@ -87,21 +86,17 @@ registerBlockType('afsarina/custom-cta', {
 
                 <PanelBody title={'Background image settings'}>
                     <p><strong>Select a background image: </strong></p>
-                 
-<MediaUpload
-				onSelect={ ( media ) =>
-					console.log( 'selected ' + media.length )
-				}
-				// allowedTypes={ ALLOWED_MEDIA_TYPES }
+                 <MediaUpload onSelect={onSelectImage} 
+				allowedTypes={ ['image'] }
 				value={ backgroundImage }
 				render={ ( { open } ) => (
 					<IconButton onClick={ open }>Open Media Library</IconButton>
 				) }
 			/>
                 </PanelBody>
-            </InspectorControls>,  
+            </InspectorControls>, 
 
-            <div class="cta-container">
+            <div class="cta-container" style={{backgroundImage: `url(${backgroundImage})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat'}}>
                 <RichText   key="editable"
                             tagName="h2"
                             placeholder="Your CTA title"
@@ -120,10 +115,10 @@ registerBlockType('afsarina/custom-cta', {
 
     save({attributes}) { 
 
-        const {title, body, titleColor, descColor} = attributes;
+        const {title, body, titleColor, descColor, backgroundImage} = attributes;
 
          return(
-            <div class="cta-container">
+            <div class="cta-container"  style={{backgroundImage: `url(${backgroundImage})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat'}}>
                 <h2 style={{color: titleColor}}>{title}</h2>
                 <RichText.Content style={{color: descColor}} tagName="p" value={body} />
             </div>

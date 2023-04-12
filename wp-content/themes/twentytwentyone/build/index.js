@@ -168,9 +168,8 @@ registerBlockType('afsarina/custom-cta', {
       });
     }
     function onSelectImage(newImage) {
-      // setAttributes({backgroundImage: newImage.sizes.full.url})
       setAttributes({
-        backgroundImage: newImage.media.url
+        backgroundImage: newImage.sizes.full.url
       });
     }
     const setImageAttributes = media => {
@@ -203,9 +202,8 @@ registerBlockType('afsarina/custom-cta', {
     })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(PanelBody, {
       title: 'Background image settings'
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("strong", null, "Select a background image: ")), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(MediaUpload, {
-      onSelect: media => console.log('selected ' + media.length)
-      // allowedTypes={ ALLOWED_MEDIA_TYPES }
-      ,
+      onSelect: onSelectImage,
+      allowedTypes: ['image'],
       value: backgroundImage,
       render: _ref2 => {
         let {
@@ -216,7 +214,13 @@ registerBlockType('afsarina/custom-cta', {
         }, "Open Media Library");
       }
     }))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      class: "cta-container"
+      class: "cta-container",
+      style: {
+        backgroundImage: `url(${backgroundImage})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat'
+      }
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(RichText, {
       key: "editable",
       tagName: "h2",
@@ -242,10 +246,17 @@ registerBlockType('afsarina/custom-cta', {
       title,
       body,
       titleColor,
-      descColor
+      descColor,
+      backgroundImage
     } = attributes;
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      class: "cta-container"
+      class: "cta-container",
+      style: {
+        backgroundImage: `url(${backgroundImage})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat'
+      }
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", {
       style: {
         color: titleColor
